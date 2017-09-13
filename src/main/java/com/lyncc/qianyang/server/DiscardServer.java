@@ -1,5 +1,6 @@
-package com.lyncc.qianyang;
+package com.lyncc.qianyang.server;
 
+import com.lyncc.qianyang.handler.DiscardServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,7 +11,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- http://netty.io/wiki/user-guide-for-4.x.html#wiki-h2-4
+ * http://netty.io/wiki/user-guide-for-4.x.html#wiki-h2-4
  */
 public class DiscardServer {
     private int port;
@@ -22,6 +23,7 @@ public class DiscardServer {
      * bossGroup 用来接收连接请求
      * workerGroup: 一旦bossGroup将接受请求注册到 workerGroup中， workerGroup 就会去处理连接传递的数据
      * 线程创建的个数，以及线程如何映射到创建的 Channel 取决于EventLoopGroup的实现
+     *
      * ChannelInitializer 用来配置一个Channel, 比如通常用来配置 ChannelPipeline of Channel(比如添加一些 handler 来实现你的web应用)
      * 当多个handlers 被添加，你的应用会越来越复杂，最终这个 ChannelInitializer 匿名类会被提取到顶级类中
      */
@@ -33,6 +35,7 @@ public class DiscardServer {
         //How many Threads are used and how they are mapped to the created Channels depends on the EventLoopGroup
         //implementation and may be even configurable via a constructor.
         EventLoopGroup workerGroup = new NioEventLoopGroup();
+
         try{
             ServerBootstrap bootstrap = new ServerBootstrap();
 
@@ -60,7 +63,8 @@ public class DiscardServer {
             future.channel().closeFuture().sync();
 
         }finally {
-
+            workerGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
         }
     }
 
