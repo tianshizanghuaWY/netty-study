@@ -30,18 +30,18 @@ public class FactorialServer {
         }
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup worderGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try{
             ServerBootstrap server = new ServerBootstrap();
-            server.group(bossGroup,worderGroup).channel(NioServerSocketChannel.class)
+            server.group(bossGroup,workerGroup).channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new FactorialServerInitializer(sslContext));
 
             server.bind(PORT).sync().channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
-            worderGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
     }
 }
