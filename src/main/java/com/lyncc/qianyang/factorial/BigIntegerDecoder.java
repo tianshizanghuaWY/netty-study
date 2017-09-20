@@ -18,6 +18,8 @@ public class BigIntegerDecoder extends ByteToMessageDecoder{
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf,
                           List<Object> out) throws Exception {
 
+        System.out.println("---------------> decode:");
+
         // Wait until the length prefix is available.
         if (byteBuf.readableBytes() < 5) {
             return;
@@ -43,6 +45,7 @@ public class BigIntegerDecoder extends ByteToMessageDecoder{
         byte[] decoded = new byte[dataLength];
         byteBuf.readBytes(decoded);
 
+        System.out.println("---------------> decode:" + new BigInteger(decoded));
         out.add(new BigInteger(decoded));
     }
     

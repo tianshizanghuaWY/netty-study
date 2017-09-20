@@ -56,6 +56,8 @@ public class FactorialClientHandler extends SimpleChannelInboundHandler<BigInteg
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, final BigInteger bigInteger) throws Exception {
         receivedMessages++;
 
+        System.out.println("---------------> channelRead0 receivedMessages:" + receivedMessages);
+
         if(receivedMessages == FactorialClient.COUNT){
             // Offer the answer after closing the connection.
             ctx.channel().close().addListener(new ChannelFutureListener() {
@@ -71,6 +73,7 @@ public class FactorialClientHandler extends SimpleChannelInboundHandler<BigInteg
         ChannelFuture future = null;
         for(int i = 0; i < 4096 && next <= FactorialClient.COUNT; i++){
 
+            System.out.println("---------------> ctx write:" + next);
             future = ctx.write(Integer.valueOf(next));
 
             next++;
@@ -81,6 +84,7 @@ public class FactorialClientHandler extends SimpleChannelInboundHandler<BigInteg
             future.addListener(numberSenderListenser);
         }
 
+        System.out.println("---------------> ctx flush");
         ctx.flush();
     }
     private final ChannelFutureListener numberSenderListenser = new ChannelFutureListener() {

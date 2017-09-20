@@ -20,9 +20,12 @@ public class FactorialServerHandler extends SimpleChannelInboundHandler<BigInteg
     protected void channelRead0(ChannelHandlerContext channelHandlerContext,
                                 BigInteger msg) throws Exception {
 
+        System.out.println("---------------> channelRead0:" + msg);
+
         lastMultiplier = msg;
         factorial = factorial.multiply(lastMultiplier);
 
+        System.out.println("---------------> channelRead0 writeAndFlush:" + factorial);
         channelHandlerContext.writeAndFlush(factorial);
     }
 

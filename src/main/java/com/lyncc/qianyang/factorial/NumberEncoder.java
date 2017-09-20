@@ -11,9 +11,10 @@ import java.math.BigInteger;
  * a magic number ('F' or 0x46) and a 32-bit length prefix.  For example, 42
  * will be encoded to { 'F', 0, 0, 0, 1, 42 }.
  * */
-public class NumberEncoder extends MessageToByteEncoder{
+public class NumberEncoder extends MessageToByteEncoder<Number>{
     protected void encode(ChannelHandlerContext channelHandlerContext,
-                          Object o, ByteBuf byteBuf) throws Exception {
+                          Number o, ByteBuf byteBuf) throws Exception {
+        System.out.println("---------------> encode:" + o);
         BigInteger value;
         if(o instanceof  BigInteger){
             value = (BigInteger)o;
@@ -27,7 +28,7 @@ public class NumberEncoder extends MessageToByteEncoder{
         //write a message
         byteBuf.writeByte('F');      //magic number
         byteBuf.writeInt(dataLength);//data length
-        byteBuf.readBytes(byteData); //data
+        byteBuf.writeBytes(byteData); //data
     }
 
     public static void main(String[] args){
