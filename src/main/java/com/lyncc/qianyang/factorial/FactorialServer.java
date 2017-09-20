@@ -45,3 +45,23 @@ public class FactorialServer {
         }
     }
 }
+
+/*
+ * ctx.write[client] -> encode[client]
+ * .....
+ * ctx.flush[client]
+
+ * -> decode[server]
+    -> channelRead0()[server]
+       -> ctx.writeAndFlush[server]
+          -> encode[server]
+ * -> decode[client]
+    -> channelRead0[client]
+
+ * -> decode[server]
+    -> channelRead0()[server]
+       -> ctx.writeAndFlush[server]
+          -> encode[server]
+ * -> decode[client]
+    -> channelRead0[client]
+ */
