@@ -9,6 +9,9 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 
+/*
+* 客户端 write, 需要处理 写空闲
+**/
 @Sharable
 public class ConnectorIdleStateTrigger extends ChannelInboundHandlerAdapter {
     

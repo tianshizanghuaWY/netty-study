@@ -27,6 +27,9 @@ public class HeartBeatServer {
         this.port = port;
     }
 
+    /*
+     * IdleStateHandler 接受 5 秒的 读空闲, 超过5 秒触发 idleStateTrigger- userEventTrigger(IdleEvent.readtimeout)
+     */
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();

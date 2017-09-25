@@ -1,13 +1,8 @@
 package com.lyncc.netty.idle;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.*;
 import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
@@ -17,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 
  * 重连检测狗，当发现当前的链路不稳定关闭之后，进行12次重连
+ * 为什么是 Shareable， 它导致 对 bootstrap 的操作需要加锁
  */
 @Sharable
 public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter implements TimerTask ,ChannelHandlerHolder{
@@ -48,9 +44,9 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         
         System.out.println("当前链路已经激活了，重连尝试次数重新置为0");
-        
         attempts = 0;
-        ctx.fireChannelActive();
+
+        ctx.fireChannelActive(); //事件透传
     }
     
     @Override
@@ -75,18 +71,16 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
         //bootstrap已经初始化好了，只需要将handler填入就可以了
         synchronized (bootstrap) {
             bootstrap.handler(new ChannelInitializer<Channel>() {
-
                 @Override
                 protected void initChannel(Channel ch) throws Exception {
                     
                     ch.pipeline().addLast(handlers());
                 }
             });
-            future = bootstrap.connect(host,port);
+            future = bootstrap.connect(host, port);
         }
         //future对象
         future.addListener(new ChannelFutureListener() {
-
             public void operationComplete(ChannelFuture f) throws Exception {
                 boolean succeed = f.isSuccess();
 
