@@ -20,6 +20,7 @@ public class AcceptorIdleStateTrigger extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent) {
             IdleState state = ((IdleStateEvent) evt).state();
             if (state == IdleState.READER_IDLE) {
+                System.out.println("server - READER_IDLE: " + TimeUtil.getCurrentFormatDateStr());
                 throw new Exception("idle exception");
             }
         } else {

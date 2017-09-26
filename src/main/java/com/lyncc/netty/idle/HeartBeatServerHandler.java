@@ -9,7 +9,7 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("server channelRead..");
-        System.out.println(ctx.channel().remoteAddress() + "->Server :" + msg.toString());
+        System.out.println(ctx.channel().remoteAddress() + " -> Server: " + msg.toString());
 
         //这里为什么不释放 msg, 不是ByteBuf ？
     }

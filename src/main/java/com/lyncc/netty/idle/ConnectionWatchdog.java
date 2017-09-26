@@ -15,10 +15,9 @@ import java.util.concurrent.TimeUnit;
  * 为什么是 Shareable， 它导致 对 bootstrap 的操作需要加锁
  */
 @Sharable
-public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter implements TimerTask ,ChannelHandlerHolder{
-    
-    
-    
+public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter
+        implements TimerTask ,ChannelHandlerHolder{
+
     private final Bootstrap bootstrap;
     private final Timer timer;
     private final int port;
@@ -43,7 +42,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         
-        System.out.println("当前链路已经激活了，重连尝试次数重新置为0");
+        System.out.println("当前链路已经激活了，重连尝试次数重新置为0:" + TimeUtil.getCurrentFormatDateStr());
         attempts = 0;
 
         ctx.fireChannelActive(); //事件透传
@@ -51,7 +50,7 @@ public abstract class ConnectionWatchdog extends ChannelInboundHandlerAdapter im
     
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("链接关闭");
+        System.out.println("链接关闭:" + TimeUtil.getCurrentFormatDateStr());
         if(reconnect){
             System.out.println("链接关闭，将进行重连");
             if (attempts < 12) {
