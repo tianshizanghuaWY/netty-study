@@ -14,20 +14,27 @@ public class BufferTest {
     }
 
     public static void byteBufferTest(){
+        //7
         byte[] byte1 = "he     ".getBytes();
+        //8
         byte[] byte2 = "llo     ".getBytes();
 
         ByteBuffer buffer1 = ByteBuffer.allocate(10);
         ByteBuffer buffer2 = ByteBuffer.allocate(10);
+        //put 完后， buffer1 position = 7
         buffer1.put(byte1);
+        //put 完后，buffer2 position = 8
         buffer2.put(byte2);
 
         ByteBuffer buffer3 = ByteBuffer.allocate(20);
         ByteBuffer[] b4 = {buffer1, buffer2};
+
+        //put 完后，buffer3 position = 10,  而不是7
         buffer3.put(buffer1.array());
+        //put 完后，buffer3 position = 10
         buffer3.put(buffer2.array());
 
-        //读取内容
+        //读取内容， buffer1， buffer2， buffer3 都是新开辟的内存
         System.out.println(new String(buffer3.array()));
         System.out.println("buffer1 addr:" + buffer1.array());
         System.out.println("buffer2 addr:" + buffer2.array());
