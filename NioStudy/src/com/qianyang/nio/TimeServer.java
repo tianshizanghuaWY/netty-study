@@ -77,13 +77,16 @@ public class TimeServer implements Runnable{
 
     private void handleInput(SelectionKey key) throws IOException{
         try{
-
             if(key.isValid()){
                 if(key.isAcceptable()){
                     //accept new connection
+
                     ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+
                     //相当于完成TCP三次握手, TCP 物理链路正式建立
                     SocketChannel channel = ssc.accept();
+                    System.out.println("connection accept!");
+
                     channel.configureBlocking(false);
 
                     //add the new connection to the selector
@@ -118,8 +121,11 @@ public class TimeServer implements Runnable{
 
                         byte[] answerBytes = currentTime.getBytes();
                         ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
+                        //往 buffer 里写
                         writeBuffer.put(answerBytes);
-                        writeBuffer.flip();// !!!!!!!!!!
+                        //模式转换
+                        writeBuffer.flip();
+                        //从 buffer 里读
                         channel.write(writeBuffer);
                     }else if(readBytes < 0){
                         //对链路关闭
@@ -130,16 +136,22 @@ public class TimeServer implements Runnable{
             }
 
         }finally {
+            //为了测试 client - server 多次应答(保持连接)， 注释掉下面的代码
+            /*
             if(key != null){
+                //将该key 放入 cacelKeys 中
                 key.cancel();
+
                 if(key.channel() != null){
                     try {
+                        System.out.println("close channel:" + key.channel());
+
                         key.channel().close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            }
+            }*/
         }
     }
 
