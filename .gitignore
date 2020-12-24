@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+/NioStudy/NioStudy.iml
+/.idea
+/src/main/main.iml
+/*.iml
+/netty-demo/netty-demo.iml
